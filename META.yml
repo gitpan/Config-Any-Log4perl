@@ -19,6 +19,7 @@ no_index:
     - inc
 requires:
   Config::Any: 0
+  parent: 0
 resources:
   repository: https://github.com/losyme/Config-Any-Log4perl
-version: 0.01
+version: 0.02
