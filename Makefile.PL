@@ -1,33 +1,59 @@
-#######
-##
-##----- LOSYME
-##----- Config::Any::Log4perl
-##----- Config::Any loader for Log4perl config files 
-##----- Makefile.PL
-##
-########################################################################################################################
 
 use strict;
-use ExtUtils::MakeMaker;
+use warnings;
 
-WriteMakefile
-(
-      NAME          => 'Config::Any::Log4perl'
-    , LICENSE       => 'perl'
-    , AUTHOR        => 'Loïc TROCHET <losyme@gmail.com>'
-    , VERSION_FROM  => 'lib/Config/Any/Log4perl.pm'
-    , ABSTRACT      => 'Config::Any loader for Log4perl config files.'
-    , clean         => { FILES => 'Config-Any-Log4perl-*' }
-    , META_MERGE    => { resources => { repository  => 'https://github.com/losyme/Config-Any-Log4perl' }}
-    , BUILD_REQUIRES
-      => {
-          'Test::More' => 0
-      }
-    , PREREQ_PM
-      => {
-          'parent'      => 0
-        , 'Config::Any' => 0
-      }
+
+
+use ExtUtils::MakeMaker 6.30;
+
+
+
+my %WriteMakefileArgs = (
+  "ABSTRACT" => "Config::Any loader for Log4perl config files",
+  "AUTHOR" => "Lo\303\257c TROCHET <losyme\@cpan.org>",
+  "BUILD_REQUIRES" => {
+    "Config::Any" => 0,
+    "File::Find" => 0,
+    "File::Temp" => 0,
+    "Test::More" => "0.88"
+  },
+  "CONFIGURE_REQUIRES" => {
+    "ExtUtils::MakeMaker" => "6.30"
+  },
+  "DISTNAME" => "Config-Any-Log4perl",
+  "EXE_FILES" => [],
+  "LICENSE" => "perl",
+  "NAME" => "Config::Any::Log4perl",
+  "PREREQ_PM" => {
+    "Config::Any::Base" => 0,
+    "parent" => 0,
+    "strict" => 0,
+    "warnings" => 0
+  },
+  "VERSION" => "0.130020",
+  "test" => {
+    "TESTS" => "t/*.t"
+  }
 );
 
-####### END ############################################################################################################
+
+unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
+  my $br = delete $WriteMakefileArgs{BUILD_REQUIRES};
+  my $pp = $WriteMakefileArgs{PREREQ_PM};
+  for my $mod ( keys %$br ) {
+    if ( exists $pp->{$mod} ) {
+      $pp->{$mod} = $br->{$mod} if $br->{$mod} > $pp->{$mod};
+    }
+    else {
+      $pp->{$mod} = $br->{$mod};
+    }
+  }
+}
+
+delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
+  unless eval { ExtUtils::MakeMaker->VERSION(6.52) };
+
+WriteMakefile(%WriteMakefileArgs);
+
+
+
